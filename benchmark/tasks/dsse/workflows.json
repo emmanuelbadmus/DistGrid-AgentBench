@@ -1,0 +1,1037 @@
+[
+  {
+    "id": "001",
+    "query": "Load the Stowe DSSE case and generate synthetic measurements with 0.006 p.u. noise and 55 percent coverage. Report the measurement count from the generated set.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.006,
+          "coverage": 0.55
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "For the South Hero feeder, set up the DSSE case and generate clean measurements with 0.003 p.u. noise and 95 percent coverage, then export the measurement dataset to a JSON report.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.003,
+          "coverage": 0.95
+        }
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Create a DSSE monitoring view for South Hero by estimating the state with measurement noise 0.002 p.u., 70 percent coverage, pseudo-measurements enabled, and saving the estimated-voltage plot.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.7
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": true
+        }
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Run a Rochester DSSE case with measurement noise 0.003 p.u. and 100 percent coverage, then save the residual plot so the measurement fit can be inspected.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.003,
+          "coverage": 1.0
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Rochester has several missing meter points. Generate measurements with noise 0.004 p.u. and 85 percent coverage, drop 25 percent of them, map the sparse measurement set to network state variables, estimate the state with pseudo-measurements, and report the voltage error.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.004,
+          "coverage": 0.85
+        }
+      },
+      {
+        "name": "drop_measurements",
+        "arguments": {
+          "drop_fraction": 0.25
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": true
+        }
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "Use a clean South Hero DSSE baseline with measurement noise 0.002 p.u. and 100 percent coverage, report how close the estimated voltages are to the synthetic truth, and export a JSON report.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 1.0
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "For Glover, generate measurements with noise 0.005 p.u. and 65 percent coverage, drop 40 percent of them. Assemble the measurement-to-state observation matrix before running the estimator, skip pseudo-measurement support, and export the DSSE results as a CSV report.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.005,
+          "coverage": 0.65
+        }
+      },
+      {
+        "name": "drop_measurements",
+        "arguments": {
+          "drop_fraction": 0.4
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Simulate a Rochester telemetry outage: generate measurements with 0.003 p.u. noise and 75 percent coverage, inject bad data into 5 percent of measurements at 0.08 p.u. magnitude, drop 10 percent of measurements, estimate the state, and report measurements flagged at normalized residual threshold 3.5.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester",
+          "backend": "auto"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.003,
+          "coverage": 0.75
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.05,
+          "magnitude_pu": 0.08
+        }
+      },
+      {
+        "name": "drop_measurements",
+        "arguments": {
+          "drop_fraction": 0.1
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 3.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Run Rochester as a clean DSSE case with 90 percent telemetry coverage and 0.001 p.u. measurement noise. Save the voltage map and report the final error.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.001,
+          "coverage": 0.9
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Produce an operator-friendly Rochester DSSE visual by estimating with 60 percent coverage, 0.002 p.u. noise, pseudo-measurements enabled, and saving both voltage and residual plots.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.6
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": true
+        }
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "For a Rochester bad-data scenario with 0.003 p.u. noise and 75 percent coverage, inject bad data into 5 percent of measurements at 0.08 p.u. magnitude, drop 10 percent, estimate the state, and report flagged measurements at threshold 3.5.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.003,
+          "coverage": 0.75
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.05,
+          "magnitude_pu": 0.08
+        }
+      },
+      {
+        "name": "drop_measurements",
+        "arguments": {
+          "drop_fraction": 0.1
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 3.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Bias 12 percent of Glover voltage readings by 0.06 p.u., estimate the state from 100 percent coverage with 0.003 p.u. noise, and check whether normalized residual threshold 3.0 flags suspicious data.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.003,
+          "coverage": 1.0
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.12,
+          "magnitude_pu": 0.06
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 3.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Create the Stowe DSSE bad-data case by adding a -0.05 p.u. voltage bias to 8 percent of measurements after generating 90 percent coverage with 0.002 p.u. noise, then estimate the state and show residuals above threshold 2.5.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.9
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.08,
+          "magnitude_pu": -0.05
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 2.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Make Stowe voltage measurements noisier with 0.01 p.u. noise and 80 percent coverage, estimate with pseudo-measurements enabled, compute the state estimation error, export a TXT DSSE report, and save a residual plot for inspection.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.01,
+          "coverage": 0.8
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": true
+        }
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "txt"
+        }
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Estimate the Glover state from 70 percent meter coverage with 0.004 p.u. noise and without pseudo-measurement support. Return voltage RMSE, an estimated-voltage map, and a TXT report.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.004,
+          "coverage": 0.7
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "txt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "For Glover with 50 percent meter coverage and 0.002 p.u. noise, drop 30 percent of the measurements, inject bad data into 10 percent at 0.07 p.u. magnitude, estimate the state, and report the detection result and final voltage RMSE.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.5
+        }
+      },
+      {
+        "name": "drop_measurements",
+        "arguments": {
+          "drop_fraction": 0.3
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.1,
+          "magnitude_pu": 0.07
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {}
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Start South Hero from a clean DSSE baseline with 70 percent coverage and 0.002 p.u. noise, re-estimate, report the error, and keep a JSON report and estimated-voltage plot.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.7
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Run the full Stowe mini-DSSE workflow with 85 percent coverage and 0.002 p.u. noise: inject bad data into 15 percent of measurements at 0.04 p.u. magnitude, estimate voltages, report error, flag bad data with threshold 2.8, save residuals, and export the report to JSON.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.002,
+          "coverage": 0.85
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.15,
+          "magnitude_pu": 0.04
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {}
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 2.8
+        }
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Use Stowe for the hardest sparse-measurement DSSE audit with synthetic backend, 45 percent coverage, 0.006 p.u. noise, seed 20, and no pseudo support. Compute the state estimation error after the first run, then add bad data to 15 percent of measurements at 0.08 p.u. magnitude, rerun without pseudo support, flag residuals with threshold 2.0, plot both diagnostics, and export CSV.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "stowe",
+          "backend": "synthetic"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.006,
+          "coverage": 0.45,
+          "seed": 20
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.15,
+          "magnitude_pu": 0.08
+        }
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 2.0
+        }
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Run a hard Glover DSSE case with automatic backend, 65 percent telemetry coverage, 0.005 p.u. noise, seed 19, pseudo-measurements disabled, injected bad data in 40 percent of measurements at 0.06 p.u. magnitude, re-estimation without pseudo-measurements, bad-data detection threshold 2.5, both plots, error metrics, and a CSV report.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_dsse_case",
+        "arguments": {
+          "feeder": "glover",
+          "backend": "auto"
+        }
+      },
+      {
+        "name": "run_truth_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "generate_measurements_from_truth",
+        "arguments": {
+          "noise_std_pu": 0.005,
+          "coverage": 0.65,
+          "seed": 19
+        }
+      },
+      {
+        "name": "build_measurement_topology",
+        "arguments": {}
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "inject_bad_data",
+        "arguments": {
+          "target_fraction": 0.4,
+          "magnitude_pu": 0.06
+        }
+      },
+      {
+        "name": "run_dsse",
+        "arguments": {
+          "use_pseudo_measurements": false
+        }
+      },
+      {
+        "name": "detect_bad_data",
+        "arguments": {
+          "normalized_residual_threshold": 2.5
+        }
+      },
+      {
+        "name": "compute_state_estimation_error",
+        "arguments": {}
+      },
+      {
+        "name": "plot_estimated_voltage_map",
+        "arguments": {}
+      },
+      {
+        "name": "plot_residuals",
+        "arguments": {}
+      },
+      {
+        "name": "export_dsse_report",
+        "arguments": {
+          "file_format": "csv"
+        }
+      }
+    ]
+  }
+]

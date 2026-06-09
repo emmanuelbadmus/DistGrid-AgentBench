@@ -1,0 +1,13 @@
+{
+  "name": "NMC 100kWh",
+  "chemistry": "NMC",
+  "capacity_kwh": 100,
+  "power_kw": 75,
+  "roundtrip_efficiency": 0.90,
+  "min_soc": 0.15,
+  "max_soc": 0.90,
+  "cycle_life": 4000,
+  "capital_cost_per_kwh": 280,
+  "om_cost_per_kwh_year": 8,
+  "calendar_life_years": 12
+}

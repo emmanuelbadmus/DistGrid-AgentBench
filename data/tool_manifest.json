@@ -1,0 +1,434 @@
+[
+  {
+    "name": "analyze_distribution",
+    "description": "Analyze the statistical distribution of a PV system metric"
+  },
+  {
+    "name": "analyze_growth",
+    "description": "Analyze cumulative PV capacity growth over time using installation date metadata"
+  },
+  {
+    "name": "analyze_market_share",
+    "description": "Compute inverter manufacturer market share among active PV systems"
+  },
+  {
+    "name": "analyze_self_consumption",
+    "description": "Analyze solar self-consumption for loaded profiles"
+  },
+  {
+    "name": "apply_capacity_scaling",
+    "description": "Scale all active PV system capacities by a constant factor"
+  },
+  {
+    "name": "audit_metadata_integrity",
+    "description": "Audit PV system metadata completeness and flag missing or default values"
+  },
+  {
+    "name": "build_constraints",
+    "description": "Build Pyomo constraints for the active model"
+  },
+  {
+    "name": "build_measurement_topology",
+    "description": "Construct the observation matrix that maps measurements to network state variables"
+  },
+  {
+    "name": "build_objective",
+    "description": "Set the optimization objective for the active model"
+  },
+  {
+    "name": "calculate_degradation",
+    "description": "Project battery state-of-health degradation over time"
+  },
+  {
+    "name": "calculate_economics",
+    "description": "Perform financial analysis of the BESS investment"
+  },
+  {
+    "name": "calculate_electricity_bill",
+    "description": "Calculate the electricity bill for a load profile"
+  },
+  {
+    "name": "calculate_pv_output",
+    "description": "Run the PV generation output calculation"
+  },
+  {
+    "name": "calculate_savings",
+    "description": "Calculate savings from the latest BESS simulation"
+  },
+  {
+    "name": "calculate_total_power",
+    "description": "Calculate the total real/reactive load or solar power in the network"
+  },
+  {
+    "name": "check_ev_charger_voltage_impacts",
+    "description": "Check voltage magnitudes at EV charger candidate buses"
+  },
+  {
+    "name": "check_gfi_stability",
+    "description": "Check whether the latest GFI simulation appears stable"
+  },
+  {
+    "name": "check_voltage_violations",
+    "description": "Check all buses for voltage violations"
+  },
+  {
+    "name": "compare_battery_options",
+    "description": "Compare battery options by cost and performance"
+  },
+  {
+    "name": "compare_gfi_solvers",
+    "description": "Compare elapsed times for prior full and Schur GFI simulations"
+  },
+  {
+    "name": "compare_strategies",
+    "description": "Compare BESS dispatch strategies"
+  },
+  {
+    "name": "compare_with_feeder",
+    "description": "Compare the active PV dataset capacity against another feeder's data"
+  },
+  {
+    "name": "compute_poa_irradiance",
+    "description": "Compute plane-of-array irradiance for all active PV systems"
+  },
+  {
+    "name": "compute_state_estimation_error",
+    "description": "Compute voltage estimation error relative to the synthetic truth state"
+  },
+  {
+    "name": "configure_simulation",
+    "description": "Configure the BESS simulation state"
+  },
+  {
+    "name": "count_pv_systems",
+    "description": "Return the count of PV systems in the active model"
+  },
+  {
+    "name": "create_and_initialize_model",
+    "description": "Create and initialize the active Pyomo model"
+  },
+  {
+    "name": "create_combined_td_model",
+    "description": "Couple the active Vermont transmission/subtransmission system and one"
+  },
+  {
+    "name": "detect_bad_data",
+    "description": "Flag suspicious measurements using normalized residuals from the latest estimation"
+  },
+  {
+    "name": "detect_missing_values",
+    "description": "Detect missing or null values in PV system metadata fields"
+  },
+  {
+    "name": "detect_outliers",
+    "description": "Identify PV systems with outlier capacity values above a percentile threshold"
+  },
+  {
+    "name": "drop_measurements",
+    "description": "Remove a random fraction of measurements to emulate telemetry outages"
+  },
+  {
+    "name": "estimate_backup_duration",
+    "description": "Estimate battery backup duration for a critical load"
+  },
+  {
+    "name": "estimate_bess_sizing",
+    "description": "Estimate BESS size for a given application"
+  },
+  {
+    "name": "estimate_pv_parameters",
+    "description": "Estimate diode-model electrical parameters (I_ph, I_0, Rs, Rsh) for all active PV systems"
+  },
+  {
+    "name": "export_combined_td_results",
+    "description": "Export combined T&D results to CSV or JSON"
+  },
+  {
+    "name": "export_data_to_file",
+    "description": "Export network data to a file in a specified format"
+  },
+  {
+    "name": "export_dsse_report",
+    "description": "Export DSSE estimation results to a file"
+  },
+  {
+    "name": "export_nodes_by_voltage_condition",
+    "description": "Export node names to a file based on their nominal voltage"
+  },
+  {
+    "name": "filter_pv_systems",
+    "description": "Filter the active PV systems by an attribute value"
+  },
+  {
+    "name": "generate_investment_report",
+    "description": "Generate a BESS investment analysis report"
+  },
+  {
+    "name": "generate_measurements_from_truth",
+    "description": "Generate noisy voltage measurements from the synthetic truth state"
+  },
+  {
+    "name": "get_battery_summary",
+    "description": "Show the loaded battery specification summary"
+  },
+  {
+    "name": "get_bus_voltages",
+    "description": "Get voltage magnitude and angle for buses in the active network"
+  },
+  {
+    "name": "get_component_count",
+    "description": "Count components of a specified type in the active network"
+  },
+  {
+    "name": "get_feeder",
+    "description": "Return the feeder number associated with the loaded PV dataset"
+  },
+  {
+    "name": "get_gfi_overshoot",
+    "description": "Calculate post-disturbance active or reactive power overshoot"
+  },
+  {
+    "name": "get_gfi_settling_time",
+    "description": "Estimate PLL settling time after the configured disturbance"
+  },
+  {
+    "name": "get_profile_statistics",
+    "description": "Compute summary statistics for a loaded profile"
+  },
+  {
+    "name": "get_simulation_results",
+    "description": "Retrieve results from the latest BESS simulation"
+  },
+  {
+    "name": "get_substation",
+    "description": "Return the substation identifier associated with the loaded PV dataset"
+  },
+  {
+    "name": "get_transmission_bus_voltage",
+    "description": "Report voltage magnitude and angle for one transmission bus"
+  },
+  {
+    "name": "initialize_pv_output_model",
+    "description": "Assemble the generation model from calibrated parameters and irradiance inputs"
+  },
+  {
+    "name": "inject_bad_data",
+    "description": "Inject a deterministic voltage bias into a fraction of measurements"
+  },
+  {
+    "name": "list_combined_td_voltage_violations",
+    "description": "List transmission and distribution voltage violations"
+  },
+  {
+    "name": "list_combined_td_weak_locations",
+    "description": "Rank weak combined T&D locations by voltage-limit deficit"
+  },
+  {
+    "name": "list_ev_charger_candidates",
+    "description": "List EV charger candidate sites before or after placement analysis"
+  },
+  {
+    "name": "list_top_buses",
+    "description": "List the top N buses ranked by a specified metric"
+  },
+  {
+    "name": "list_transmission_voltage_violations",
+    "description": "List upstream transmission buses outside a voltage range"
+  },
+  {
+    "name": "load_battery_specs",
+    "description": "Load battery chemistry specifications into the shared registry"
+  },
+  {
+    "name": "load_distribution_network",
+    "description": "Load a feeder model into the shared registry"
+  },
+  {
+    "name": "load_dsse_case",
+    "description": "Load a DSSE benchmark case for the specified distribution feeder"
+  },
+  {
+    "name": "load_ev_charger_data",
+    "description": "Load EV charger placement candidates for a feeder"
+  },
+  {
+    "name": "load_gfi_parameters",
+    "description": "Load grid-following inverter parameters"
+  },
+  {
+    "name": "load_grid_prices",
+    "description": "Load hourly wholesale grid prices into the registry"
+  },
+  {
+    "name": "load_load",
+    "description": "Load AMI demand data for a feeder and timestamp"
+  },
+  {
+    "name": "load_load_profile",
+    "description": "Load an hourly electrical load profile into the shared registry"
+  },
+  {
+    "name": "load_pv_dataset",
+    "description": "Load a PV interconnection dataset filtered by substation and feeder"
+  },
+  {
+    "name": "load_pv_weather_data",
+    "description": "Attach weather data to all active PV systems for a given date range"
+  },
+  {
+    "name": "load_solar",
+    "description": "Load solar power generation for a feeder"
+  },
+  {
+    "name": "load_solar_profile",
+    "description": "Load an hourly solar generation profile into the shared registry"
+  },
+  {
+    "name": "load_tariff_structure",
+    "description": "Load a utility tariff structure into the registry"
+  },
+  {
+    "name": "load_transmission_network",
+    "description": "Load the transmission network from a RAW file"
+  },
+  {
+    "name": "plot_estimated_voltage_map",
+    "description": "Plot estimated bus voltages as a compact profile chart"
+  },
+  {
+    "name": "plot_gfi_results",
+    "description": "Plot the latest GFI simulation results"
+  },
+  {
+    "name": "plot_network_data",
+    "description": "Plot network data on a topology map and save it to a PNG file"
+  },
+  {
+    "name": "plot_residuals",
+    "description": "Plot normalized measurement residuals as a bar chart"
+  },
+  {
+    "name": "prepare_distribution_for_coupling",
+    "description": "Prepare a distribution network for combined T&D coupling"
+  },
+  {
+    "name": "reset_combined_td_loads",
+    "description": "Reset combined T&D loads to their baselines"
+  },
+  {
+    "name": "run_combined_td_infeasibility",
+    "description": "Run reduced combined T&D voltage-deficit analysis"
+  },
+  {
+    "name": "run_combined_td_powerflow",
+    "description": "Run the coupled benchmark T&D power-flow approximation"
+  },
+  {
+    "name": "run_dsse",
+    "description": "Run the weighted least-squares state estimator on the active measurement set"
+  },
+  {
+    "name": "run_gfi_simulation",
+    "description": "Run the grid-following inverter simulation"
+  },
+  {
+    "name": "run_sensitivity_analysis",
+    "description": "Run a sensitivity analysis on a key parameter"
+  },
+  {
+    "name": "run_simulation",
+    "description": "Run the hourly BESS dispatch simulation"
+  },
+  {
+    "name": "run_truth_powerflow",
+    "description": "Create a synthetic ground-truth voltage state for the loaded feeder"
+  },
+  {
+    "name": "scale_combined_td_loads",
+    "description": "Scale transmission and/or distribution loads"
+  },
+  {
+    "name": "set_cable_current_limits",
+    "description": "Set cable current limits with a rating multiplier"
+  },
+  {
+    "name": "set_calculation_method",
+    "description": "Configure the PV calculation method"
+  },
+  {
+    "name": "set_combined_td_voltage_limits",
+    "description": "Set voltage limits for combined T&D reporting"
+  },
+  {
+    "name": "set_ev_charger_placement_targets",
+    "description": "Queue EV charger placement targets before building EV placement constraints"
+  },
+  {
+    "name": "set_gfi_disturbance",
+    "description": "Configure the grid disturbance for the GFI simulation"
+  },
+  {
+    "name": "set_gfi_mode",
+    "description": "Set the inverter control mode and optional droop settings"
+  },
+  {
+    "name": "set_gfi_parameter",
+    "description": "Update one GFI model or controller parameter"
+  },
+  {
+    "name": "set_simulation_timespan",
+    "description": "Set the time window and integration step that the transient solver uses"
+  },
+  {
+    "name": "set_transformer_loading_limits",
+    "description": "Set transformer loading limits with a rating multiplier"
+  },
+  {
+    "name": "set_voltage_limits",
+    "description": "Set voltage limits for the active analysis"
+  },
+  {
+    "name": "solve",
+    "description": "Solves the configured optimization model using the specified solver (default: ipopt)"
+  },
+  {
+    "name": "summarize_combined_td_results",
+    "description": "Summarize the latest combined T&D state and solve result"
+  },
+  {
+    "name": "summarize_coupling_port",
+    "description": "Report the transmission-distribution coupling port values"
+  },
+  {
+    "name": "summarize_ev_charger_placement",
+    "description": "Summarize selected EV charger sites with metadata and served demand"
+  },
+  {
+    "name": "summarize_pv_generation",
+    "description": "Return the result of the most recent PV generation calculation"
+  },
+  {
+    "name": "summarize_transmission_network",
+    "description": "Summarize the active transmission network"
+  },
+  {
+    "name": "update_bus_infeasible_currents",
+    "description": "Updates bus objects with their calculated infeasible currents based on the "
+  },
+  {
+    "name": "update_ev_charger_placement",
+    "description": "Update EV charger candidate metadata with solved placement and served demand"
+  },
+  {
+    "name": "update_loads_curtailed_power",
+    "description": "Updates the 'P_curtailed' attribute for all load objects based on the "
+  },
+  {
+    "name": "update_network_voltages",
+    "description": "Updates the real (Vr) and imaginary (Vi) voltage components for all bus objects "
+  },
+  {
+    "name": "validate_value_ranges",
+    "description": "Validate that PV system capacity values fall within acceptable physical bounds"
+  }
+]

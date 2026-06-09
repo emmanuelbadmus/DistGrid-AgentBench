@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "distgrid-agentbench"
+version = "0.1.0"
+description = "A distribution grid benchmark for agentic AI."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "pydantic>=2",
+    "scipy",
+]
+
+[project.optional-dependencies]
+geospatial = ["fiona", "geopandas", "shapely"]
+optimization = ["pyomo"]
+mcp = ["mcp>=1.0"]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+distgrid-bench-evaluate = "distgrid_bench.evaluate:main"
+distgrid-bench-mcp = "distgrid_bench.mcp_server:main"
+
+[tool.setuptools.packages.find]
+include = ["distgrid_bench*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+

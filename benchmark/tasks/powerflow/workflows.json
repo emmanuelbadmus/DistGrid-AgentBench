@@ -1,0 +1,1235 @@
+[
+  {
+    "id": "001",
+    "query": "Solve or inspect the upstream transmission power-flow case and report the voltage at bus 14.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "get_transmission_bus_voltage",
+        "arguments": {
+          "bus_id": 14
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Load the Glover feeder and make a voltage-magnitude plot from the initialized bus values before any optimization.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Check the upstream transmission power-flow case for buses outside the 0.95 to 1.05 p.u. voltage band.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "list_transmission_voltage_violations",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Run a load-only Rochester feeder power flow at 2 AM on March 20, 2025 with tolerance 1e-3 and max 150 iterations, then export solved bus voltages to JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 02:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.001,
+          "max_iter": 150
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Use the South Hero feeder at 19:00 on March 17, 2025, solve steady-state power flow, and list voltage magnitude and angle for the first 20 buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "Run steady-state three-phase power flow on Stowe for 2025-03-21 09:00 local time, then plot bus voltage magnitudes.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 09:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Solve the Rochester feeder at 10 PM on March 19, 2025, tolerance 1e-3, maximum 100 iterations, and export bus voltage results to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 22:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 22:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "tolerance": 0.001,
+          "max_iter": 100
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Run Glover power flow for March 18, 2025 at 11:00 AM, then check whether any solved bus voltages violate normal limits.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-18 11:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-18 11:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 150
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "For Stowe on 2025-03-20 at 15:00, solve power flow, check voltage-limit problems, then show the first 10 solved bus voltages.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Apply a 112 percent cable-current limit during the South Hero 2025-03-21 08:00 power-flow case, then report whether voltages violate limits.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Run constrained power flow on Stowe at 9 AM on March 21, 2025 with voltage limits from 0.96 to 1.04 p.u., then export solved voltages to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 09:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Solve Glover steady-state power flow at 03/19/2025 5 PM, then show the first 10 solved bus voltages and plot the voltage profile.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 17:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 17:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 10
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "glover"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Run Rochester steady-state three-phase power flow from 2025-03-19T22:00, then check voltage violations and plot bus voltage magnitudes.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 22:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 22:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 100
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "rochester"
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Analyze South Hero at 09:00 on March 17, 2025 by running constrained power flow with transformer loading at or below 90 percent and cable current capped at 100 percent of rating, then plot voltage.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 09:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 0.9
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "south_hero"
+        }
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Solve South Hero steady-state power flow from 2025-03-17 19:00. Export per-phase bus voltages to JSON, check voltage violations, and list the first 20 bus voltages.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Run Rochester power flow at 2 PM on March 22, 2025 with a transformer loading limit of 95 percent, then check voltage violations and export bus voltages to JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-22 14:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-22 14:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 0.95
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Use Glover at noon on March 20, 2025 for a distribution feeder power-flow solve, check solved voltages, save the voltage map, and export voltage results to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 12:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Run constrained power flow on South Hero at 2025-03-20 08:00 with voltage limits from 0.95 to 1.05 p.u., cable current up to 108 percent, and transformer loading up to 105 percent. Check violations and export results to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 08:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 08:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Solve the Glover feeder for March 21, 2025 at 6 PM. Use voltage limits 0.96 to 1.04 p.u., transformer loading capped at 102 percent, cable current capped at 105 percent, tolerance 1e-5, and max 300 iterations. Check voltage violations, show the first 20 solved bus voltages, create a voltage map, and export voltages to JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.02
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 20
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Solve South Hero power flow at 2025-03-21 08:00:00. Report total load and solar power, use voltage limits 0.97 to 1.03 p.u., cable current capped at 103 percent, transformer loading capped at 98 percent, tolerance 1e-5, and max 400 iterations. Return voltage violations, a voltage map, and CSV voltage results.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "solar"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.97,
+          "default_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.03
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 0.98
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "powerflow"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 400
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  }
+]

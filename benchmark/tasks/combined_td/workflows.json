@@ -1,0 +1,1044 @@
+[
+  {
+    "id": "001",
+    "query": "Attach the South Hero feeder to the Vermont transmission benchmark at POI bus 14 and confirm that the combined model sets up.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Before any solve, show what the South Hero coupling point looks like after it is tied to the Vermont upstream model at POI bus 14.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Summarize the Rochester T&D coupling results at POI bus 14 with IPOPT tolerance 1e-6 and max 1000 iterations.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Check the Stowe feeder from the Vermont upstream side, run the coupled T&D power flow, and report the coupling-port voltage and power exchange.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Export the normalized transmission and feeder voltages from the Stowe coupled case as CSV.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "export_combined_td_results",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "For the South Hero coupled case at POI bus 14, find the five weakest voltage locations.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Increase Glover distribution demand by 50 percent and check whether the coupled Vermont case remains stable at the interconnection point.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "distribution",
+          "multiplier": 1.5
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Increase Vermont upstream load by 20 percent and list the ten weakest locations in the South Hero coupled case.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "transmission",
+          "multiplier": 1.2
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Use a 0.98 to 1.02 p.u. voltage band on both the transmission and distribution sides of the Glover coupled case and report whether either side of the interface crosses it.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "set_combined_td_voltage_limits",
+        "arguments": {
+          "transmission_vmin_pu": 0.98,
+          "transmission_vmax_pu": 1.02,
+          "distribution_vmin_pu": 0.98,
+          "distribution_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Screen the Glover feeder tied to the Vermont upstream case on both sides with a 0.99 to 1.01 p.u. voltage band, then list the top 8 coupled T&D voltage violations and write the coupled T&D violations to CSV.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {
+          "top_k": 8
+        }
+      },
+      {
+        "name": "export_combined_td_results",
+        "arguments": {
+          "export_type": "violations",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Sanity-check the Vermont upstream system tied to South Hero at POI bus 14. I mainly need solve status and the POI active/reactive power exchange summary.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Solve the Rochester feeder tied into the Vermont upstream system, summarize the result, and export voltages for both sides to CSV.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "export_combined_td_results",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Run the South Hero coupled model with the default voltage screen and then with a tighter feeder-side screen using transmission limits 0.95 to 1.05 p.u. and distribution limits 0.97 to 1.03 p.u. so the violation counts can be compared.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "set_combined_td_voltage_limits",
+        "arguments": {
+          "transmission_vmin_pu": 0.95,
+          "transmission_vmax_pu": 1.05,
+          "distribution_vmin_pu": 0.97,
+          "distribution_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Compare Stowe POI behavior before and after doubling feeder load.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "distribution",
+          "multiplier": 2.0
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Give me the Glover coupled-case dashboard with solved summary, interconnection exchange, the top 10 voltage violations, and the ten weakest voltage locations.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Increase Stowe feeder load by 50 percent, report how the POI exchange changes before and after, and list any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "distribution",
+          "multiplier": 1.5
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Start with the South Hero coupled baseline summary and voltage screen, then tighten the distribution-side voltage band to 0.97 to 1.03 p.u. while keeping the transmission band at 0.95 to 1.05 p.u.; re-check voltage violations under the tighter limits and list the five weakest locations.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "set_combined_td_voltage_limits",
+        "arguments": {
+          "transmission_vmin_pu": 0.95,
+          "transmission_vmax_pu": 1.05,
+          "distribution_vmin_pu": 0.97,
+          "distribution_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Try a light-load sensitivity by scaling both upstream and feeder loads to 80 percent on the Rochester coupled T&D benchmark, restore the baseline, and summarize the combined T&D result and interface changes.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "both",
+          "multiplier": 0.8
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "reset_combined_td_loads",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run a Stowe coupled stress screen tied to the Vermont upstream case, summarize the coupled T&D result and POI, set transmission voltage limits to 0.98 to 1.02 p.u. and distribution voltage limits to 0.96 to 1.04 p.u., list the top 10 voltage violations, rerun L2 infeasibility, list the eight weakest locations, and export the summary to JSON.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "set_combined_td_voltage_limits",
+        "arguments": {
+          "transmission_vmin_pu": 0.98,
+          "transmission_vmax_pu": 1.02,
+          "distribution_vmin_pu": 0.96,
+          "distribution_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "run_combined_td_infeasibility",
+        "arguments": {
+          "norm": "l2"
+        }
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 8
+        }
+      },
+      {
+        "name": "export_combined_td_results",
+        "arguments": {
+          "export_type": "summary",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Build the Rochester coupled benchmark, scale transmission load to 1.15 and distribution load to 1.35, solve, summarize the coupled T&D result and coupling-port behavior, list the top 10 voltage violations, list the ten weakest locations, and export a CSV summary.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "prepare_distribution_for_coupling",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_combined_td_model",
+        "arguments": {
+          "transmission_poi_bus": 14
+        }
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "transmission",
+          "multiplier": 1.15
+        }
+      },
+      {
+        "name": "scale_combined_td_loads",
+        "arguments": {
+          "system": "distribution",
+          "multiplier": 1.35
+        }
+      },
+      {
+        "name": "run_combined_td_powerflow",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "summarize_combined_td_results",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_coupling_port",
+        "arguments": {}
+      },
+      {
+        "name": "list_combined_td_voltage_violations",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "list_combined_td_weak_locations",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "export_combined_td_results",
+        "arguments": {
+          "export_type": "summary",
+          "file_format": "csv"
+        }
+      }
+    ]
+  }
+]

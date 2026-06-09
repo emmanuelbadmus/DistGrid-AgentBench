@@ -1,0 +1,13 @@
+{
+  "name": "LFP 100kWh",
+  "chemistry": "LFP",
+  "capacity_kwh": 100,
+  "power_kw": 50,
+  "roundtrip_efficiency": 0.92,
+  "min_soc": 0.10,
+  "max_soc": 0.95,
+  "cycle_life": 6000,
+  "capital_cost_per_kwh": 350,
+  "om_cost_per_kwh_year": 5,
+  "calendar_life_years": 15
+}

@@ -1,0 +1,576 @@
+[
+  {
+    "id": "001",
+    "query": "How many capacitors are in the Rochester feeder?",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "capacitors"
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Read the stored voltage value at Vermont transmission bus 14 for a quick upstream-model lookup.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "get_transmission_bus_voltage",
+        "arguments": {
+          "bus_id": 14
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Export every Rochester feeder node name to a TXT file.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "txt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Save the Stowe nodes whose nominal voltage is below 240 volts to CSV.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 240,
+          "condition": "lt",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Load the Vermont transmission/subtransmission system and summarize bus count, branch count, total load, and voltage range.",
+    "workflow": [
+      {
+        "name": "load_transmission_network",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_transmission_network",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "Do a quick Glover topology spot-check: count regulators and line objects.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "regulators"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "lines"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Pull the South Hero 120-volt nodes into a text file and keep a JSON node export for comparison.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 120,
+          "condition": "eq",
+          "file_format": "txt"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 120,
+          "condition": "eq",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Count the Stowe transformers and save a CSV of nodes below 240 V.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "transformers"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 240,
+          "condition": "lt",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Give me the South Hero bus count and a machine-readable node list for later inspection.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "buses"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "txt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Load the Rochester feeder data at 02:00 on March 20, 2025 and report total real and reactive load before any solve.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 02:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "For a simple Stowe inventory at 5 PM on March 17, 2025, total the available solar field in watts from the loaded input data.",
+    "workflow": [
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-17 17:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "solar"
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Make a Glover topology-only check by plotting initialized bus voltage magnitudes and saving unique bus names as a TXT file.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "txt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Report the total number of buses, lines, and transformers in the Glover feeder.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "buses"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "lines"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "transformers"
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "For the Glover 2025-03-22 18:00 case, load feeder state, report total real load, and confirm how many load entries were populated.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-22 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "loads"
+        }
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Save the complete Stowe node list as JSON and report bus, line, and regulator counts.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "buses"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "lines"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "regulators"
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Build a compact South Hero topology inventory with bus, line, and transformer counts plus a TXT node-name list.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "buses"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "lines"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "transformers"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "txt"
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Load AMI consumption and solar irradiance data for Stowe at March 20, 2025, 3 PM, then report total load demand and total available solar generation.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "solar"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Use the Rochester feeder for 03/21/2025 07:00 as a data inventory: total real load, reactive load, available solar generation, and a small sample of initialized bus-voltage entries.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-21 07:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-21 07:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "solar"
+        }
+      },
+      {
+        "name": "get_bus_voltages",
+        "arguments": {
+          "limit": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Summarize the Vermont transmission model, then load Stowe, report buses, transformers, regulators, and export low-voltage nodes under 240 V to CSV.",
+    "workflow": [
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "buses"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "transformers"
+        }
+      },
+      {
+        "name": "get_component_count",
+        "arguments": {
+          "component_type": "regulators"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 240.0,
+          "condition": "lt",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Load the Rochester feeder state at 2 AM on March 20, 2025, report load and solar totals, export the full node list to JSON, and export the 120 V nodes to TXT for comparison.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 02:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 02:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "load"
+        }
+      },
+      {
+        "name": "calculate_total_power",
+        "arguments": {
+          "power_type": "solar"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "nodes",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "export_nodes_by_voltage_condition",
+        "arguments": {
+          "voltage": 120.0,
+          "condition": "eq",
+          "file_format": "txt"
+        }
+      }
+    ]
+  }
+]

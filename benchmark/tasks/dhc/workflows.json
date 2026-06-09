@@ -1,0 +1,1643 @@
+[
+  {
+    "id": "001",
+    "query": "Run a quick overnight fair-curtailment Linf hosting-capacity sanity check for Rochester at 1 AM on March 23, 2025, with voltage limits 0.95 to 1.05 p.u., then report whether the voltage profile stays clean.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-23 01:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-23 01:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Use Glover at noon on March 16, 2025 for an L2 hosting-capacity screen with tolerance 0.01 and max 100 iterations, then export the solved node voltages to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-16 12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-16 12:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "tolerance": 0.01,
+          "max_iter": 100
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "South Hero at 2025-03-21 08:00 needs an L2 hosting-capacity sanity check with cable currents capped at 112 percent; report whether the final voltages look normal.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Use Stowe at 9 PM on March 18, 2025 as the low-generation sparse L1 hosting-capacity edge check. Keep buses 5, 15, and 30 within 0.97 to 1.03 p.u. inside a 0.94 to 1.06 p.u. global band, then return the curtailed-power map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-18 21:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-18 21:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "5",
+            "15",
+            "30"
+          ],
+          "exception_vmin_pu": 0.97,
+          "exception_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "At 3 PM on March 20, 2025 in Stowe, show where sparse hosting-capacity curtailment concentrates and list the top seven buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 7
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "Rochester at March 19, 2025, 3 PM needs sparse L1 hosting capacity with normal 0.95 to 1.05 p.u. voltage limits and transformer loading capped at 110 percent; return the curtailment map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "tolerance": 0.0001,
+          "max_iter": 3000
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "rochester"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Use Glover at 03/17/2025 11:00 AM for a fair-curtailment Linf hosting-capacity view with 0.95 to 1.05 p.u. voltage limits and transformer and cable limits both capped at 107 percent.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-17 11:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-17 11:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.07
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.07
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Estimate solar hosting capacity for Glover using the March 19, 2025 15:00 case with the L2 curtailment objective, voltage limits 0.96 to 1.04 p.u., and cable current capped at 108 percent. Keep final voltage results in JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Run South Hero at 6 PM on March 22, 2025 as a sparse L1 hosting-capacity check inside the normal 0.95 to 1.05 p.u. voltage band, then map curtailment and call out the three most curtailed buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Use South Hero at 2025-03-18T19:00 for fair-curtailment Linf hosting capacity under a relaxed 115 percent cable-current limit, then export solved voltages to CSV and create the voltage map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-18 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-18 19:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.15
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 200
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "south_hero"
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Run Stowe at 10 AM on March 21, 2025 with the fair-curtailment view and transformer loading limited to 105 percent. Report the top five curtailed buses and export voltages to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 150
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Rochester at 8 AM on March 21, 2025 needs a fair-curtailment Linf hosting-capacity pass with transformer and cable loading both capped at 109 percent; return the voltage map and five highest-curtailment buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-21 08:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.09
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.09
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Use South Hero at noon on March 19, 2025 for an L2 hosting-capacity check with transformer loading capped at 112 percent and cable current capped at 108 percent, then list the seven most curtailed buses and save solved voltages as CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-19 12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-19 12:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 7
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Run Glover at 5 PM on March 22, 2025 with fair-curtailment hosting capacity, the 0.95 to 1.05 p.u. voltage band, and cable loading capped at 113 percent. Identify the four most curtailed buses and any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-22 17:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-22 17:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.13
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 4
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Rochester at March 20, 2025, 06:00 should use a sparse L1 hosting-capacity edge case with voltage limits 0.95 to 1.05 p.u. and transformer loading capped at 108 percent; return the curtailment map and a JSON voltage export.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 06:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-20 06:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l1"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Use Stowe at 2 PM on March 17, 2025 for an L2 hosting-capacity screen where buses 2 and 20 are held to 0.98 to 1.02 p.u. inside a 0.96 to 1.04 p.u. global band and transformer loading is capped at 110 percent. Show six highest-curtailment buses and the voltage map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-17 14:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-17 14:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04,
+          "exception_bus_ids": [
+            "2",
+            "20"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 6
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Run Rochester at 7 PM on March 19, 2025 as an L2 hosting-capacity stress screen with voltage limits 0.93 to 1.07 p.u., cable current capped at 111 percent, and transformer loading capped at 114 percent. Return the curtailment map, the top five curtailed buses, and solved node voltages as CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 19:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.93,
+          "default_vmax_pu": 1.07,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.11
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.14
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 250
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Use Glover on March 21, 2025 at 18:00 as a low-solar L2 hosting-capacity stress test with voltage limits 0.94 to 1.06 p.u., transformer loading capped at 108 percent, and cable current capped at 110 percent. Include the top five curtailed buses, JSON voltage export, and a voltage-violation check.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run the hard Rochester hosting-capacity stress case for 03/19/2025 8 PM with L2 curtailment, voltage limits 0.96 to 1.04 p.u., transformer loading capped at 105 percent, and cable current capped at 105 percent, then list the top 10 curtailed buses, export voltages to CSV, a voltage map, a curtailment map, and report any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 20:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 20:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 600
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 10
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Use Stowe at 2025-03-23 10:00:00 for the difficult fair-curtailment case with solar, voltage limits 0.94 to 1.06 p.u., buses 10, 25, and 36 tightened to 0.98 to 1.02 p.u., transformer loading capped at 108 percent, and cable current capped at 110 percent; return the top twelve curtailed buses, voltage violations, both maps, and JSON voltages.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "10",
+            "25",
+            "36"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 800
+        }
+      },
+      {
+        "name": "update_loads_curtailed_power",
+        "arguments": {
+          "analysis_type": "dhc_linf"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "curtailment",
+          "top_k": 12
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "curtailment",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  }
+]

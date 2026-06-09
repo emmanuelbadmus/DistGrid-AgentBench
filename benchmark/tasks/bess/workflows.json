@@ -1,0 +1,1296 @@
+[
+  {
+    "id": "001",
+    "query": "Summarize the technical specs and cost for an LFP battery sized at 150 kWh, 75 kW, and 94 percent efficiency.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 150,
+          "power_override_kw": 75,
+          "efficiency_override": 0.94
+        }
+      },
+      {
+        "name": "get_battery_summary",
+        "arguments": {
+          "include_cost_info": true,
+          "include_technical_specs": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Take the standard office load, scale it to 1.5x, and produce a 24-hour load summary with the hourly breakdown at the 90 pct threshold.",
+    "workflow": [
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 1.5,
+          "hours_to_load": 24
+        }
+      },
+      {
+        "name": "get_profile_statistics",
+        "arguments": {
+          "profile_type": "load",
+          "include_hourly_breakdown": true,
+          "percentile_threshold": 90.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "How long would lfp_100kwh support a 40 kW critical load? Check 95 percent SOC and 70 percent SOC, both down to 10 percent, and include load-shedding options.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh"
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 40.0,
+          "initial_soc": 0.95,
+          "min_soc": 0.1,
+          "include_load_shedding_options": true
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 40.0,
+          "initial_soc": 0.7,
+          "min_soc": 0.1,
+          "include_load_shedding_options": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Load the commercial office profile and double the 50 kW solar array. Under 80 percent cloud cover, check whether the site still reaches the 85 percent self-consumption target.",
+    "workflow": [
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 2.0,
+          "cloud_cover_factor": 0.8
+        }
+      },
+      {
+        "name": "analyze_self_consumption",
+        "arguments": {
+          "target_self_consumption": 0.85
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Compare 15-year ownership cost for LFP versus NMC at 1.5 cycles per day, and include LFP degradation after 15 years at 80 percent depth of discharge.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh"
+        }
+      },
+      {
+        "name": "compare_battery_options",
+        "arguments": {
+          "chemistries": "lfp_100kwh,nmc_100kwh",
+          "project_years": 15,
+          "comparison_metric": "tco",
+          "cycles_per_day": 1.5
+        }
+      },
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh"
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 15,
+          "cycles_per_day": 1.5,
+          "depth_of_discharge": 0.8
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "I need a battery sizing run using the office and solar profiles. It should shave peak by 25%, reach 90 pct self-consumption, and keep 60 kW online for 4 hours during an outage.",
+    "workflow": [
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array"
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "peak_shaving",
+          "target_peak_reduction_pct": 25.0
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "backup",
+          "backup_load_kw": 60.0,
+          "backup_hours": 4.0
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "self_consumption",
+          "target_self_consumption": 0.9
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Can you run a backup stress test for a large facility with a 500 kWh / 250 kW LFP battery? First get the battery summary, then report duration at 200 kW, at 100 kW from half charge, and at 25 kW in survival mode using a 5 percent minimum state of charge, and include the load-shedding options.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 500,
+          "power_override_kw": 250
+        }
+      },
+      {
+        "name": "get_battery_summary",
+        "arguments": {
+          "include_cost_info": true,
+          "include_technical_specs": true
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 200.0,
+          "initial_soc": 1.0
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 100.0,
+          "initial_soc": 0.5
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 25.0,
+          "initial_soc": 1.0,
+          "min_soc": 0.05,
+          "include_load_shedding_options": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Estimate annual arbitrage revenue for a 100 kWh NMC battery with 100 kW power capability. Load the commercial office profile, use the volatile grid-price profile scaled to 1.5x, start from 50 percent SOC, and run the simulation in verbose mode.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "nmc_100kwh",
+          "power_override_kw": 100
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_grid_prices",
+        "arguments": {
+          "source": "volatile",
+          "price_multiplier": 1.5,
+          "hours": 24
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "arbitrage"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "arbitrage",
+          "annual_projection": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Use lfp_100kwh at an office site on the summer TOU tariff. Start at half charge, target a 130 kW peak, and report the annual savings.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh"
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer"
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "peak_shaving",
+          "target_peak_kw": 130.0
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {}
+      },
+      {
+        "name": "get_simulation_results",
+        "arguments": {
+          "metric": "summary"
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original"
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Load the NMC 100 kWh battery with the standard office profile on the summer TOU tariff. Start at 40 percent SOC, run arbitrage, calculate arbitrage savings with annual projection, calculate 10-year degradation at 1 cycle per day with calendar factor 0.15, and generate a 10-year investment report with degradation but no sensitivity.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "nmc_100kwh"
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer"
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.4,
+          "strategy": "arbitrage"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original"
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "arbitrage",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 10,
+          "cycles_per_day": 1.0,
+          "depth_of_discharge": 0.8,
+          "calendar_factor": 0.15
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": false,
+          "include_degradation": true,
+          "project_years": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "At a residential home with the 50 kW solar array scaled to 30 percent and 75 percent cloud cover, run LFP 100 kWh self-consumption starting at 50 percent SOC, estimate backup duration for a 4 kW critical load from 90 percent SOC to 10 percent including load-shedding options, calculate total annual savings, then generate a full 12-year investment report at 0.5 cycles per day, a 5 percent discount rate and 2 percent electricity escalation.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh"
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "residential_home"
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 0.3,
+          "cloud_cover_factor": 0.75
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "self_consumption"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 4.0,
+          "initial_soc": 0.9,
+          "min_soc": 0.1,
+          "include_load_shedding_options": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 12,
+          "discount_rate": 0.05,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.02
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 12,
+          "cycles_per_day": 0.5,
+          "depth_of_discharge": 0.8
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-20,-10,0,10,20",
+          "base_metric": "npv"
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": true,
+          "include_degradation": true,
+          "project_years": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Analyze a site with 1.5x standard office load and 1.5x solar capacity on the summer TOU tariff. Load the tariff structure, analyze self-consumption including export analysis with a 90 percent target, use the 95th-percentile net load with hourly breakdown, size for 30 percent peak reduction, load the LFP battery specs at 150 kWh, get the full battery summary with cost and technical specs, and compare 10-year TCO for LFP and NMC at 1.0 cycles per day.",
+    "workflow": [
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 1.5
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 1.5
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer"
+        }
+      },
+      {
+        "name": "get_profile_statistics",
+        "arguments": {
+          "profile_type": "net_load",
+          "include_hourly_breakdown": true,
+          "percentile_threshold": 95.0
+        }
+      },
+      {
+        "name": "analyze_self_consumption",
+        "arguments": {
+          "include_export_analysis": true,
+          "target_self_consumption": 0.9
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "peak_shaving",
+          "target_peak_reduction_pct": 30.0
+        }
+      },
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 150
+        }
+      },
+      {
+        "name": "get_battery_summary",
+        "arguments": {
+          "include_cost_info": true,
+          "include_technical_specs": true
+        }
+      },
+      {
+        "name": "compare_battery_options",
+        "arguments": {
+          "chemistries": "lfp_100kwh,nmc_100kwh",
+          "project_years": 10,
+          "comparison_metric": "tco",
+          "cycles_per_day": 1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Use the NMC arbitrage case with the volatile grid-price profile scaled to 2.0x. Load the commercial office profile, start from 50 percent SOC, run the simulation in verbose mode, show the battery summary, calculate arbitrage savings, show the 10-year degradation at 2.0 cycles per day with calendar factor 0.2, and compare NPV against the LFP option at 2.0 cycles per day.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "nmc_100kwh",
+          "capacity_override_kwh": 100,
+          "power_override_kw": 100
+        }
+      },
+      {
+        "name": "get_battery_summary",
+        "arguments": {
+          "include_cost_info": true,
+          "include_technical_specs": true
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office"
+        }
+      },
+      {
+        "name": "load_grid_prices",
+        "arguments": {
+          "source": "volatile",
+          "price_multiplier": 2.0,
+          "hours": 24
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "arbitrage"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 10,
+          "cycles_per_day": 2.0,
+          "calendar_factor": 0.2
+        }
+      },
+      {
+        "name": "compare_battery_options",
+        "arguments": {
+          "chemistries": "lfp_100kwh,nmc_100kwh",
+          "project_years": 10,
+          "comparison_metric": "npv",
+          "cycles_per_day": 2.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "For a 2x office load with a 2x solar array, size the LFP case using a 200 kW peak target, start the simulation at 50% charge, and run a 10-year NPV analysis at a 5% discount rate with 2% electricity escalation and no degradation, with a sensitivity sweep at -20, base, +20, and +40 percent electricity prices.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 200,
+          "power_override_kw": 100
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "peak_shaving",
+          "target_peak_kw": 200.0
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "peak_shaving",
+          "target_peak_kw": 200.0
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {}
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-20,0,20,40"
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 10,
+          "discount_rate": 0.05,
+          "include_degradation": false,
+          "electricity_escalation_rate": 0.02
+        }
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Set up a hybrid TOU case for a large site: 300 kWh / 150 kW LFP, triple office load, quadruple the 50 kW solar array, use the summer TOU tariff with demand charge 22.0 and energy rates scaled by 1.15, analyze self-consumption including export analysis with a 90 percent target, calculate the electricity bill with demand breakdown, start at 40 percent SOC, charge during hours 0-5 and 10-12, discharge during hours 16-21, run the simulation in verbose mode, calculate total annual savings with annual projection, then generate a full 12-year investment report at 1.5 cycles per day, a 7 percent discount rate and 2 percent electricity escalation.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 300,
+          "power_override_kw": 150
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 3.0
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 4.0
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer",
+          "demand_charge_override": 22.0,
+          "energy_rate_multiplier": 1.15
+        }
+      },
+      {
+        "name": "analyze_self_consumption",
+        "arguments": {
+          "include_export_analysis": true,
+          "target_self_consumption": 0.9
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original",
+          "include_demand_breakdown": true
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.4,
+          "strategy": "time_of_use",
+          "charge_hours": "0,1,2,3,4,5,10,11,12",
+          "discharge_hours": "16,17,18,19,20,21"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 12,
+          "discount_rate": 0.07,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.02
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 12,
+          "cycles_per_day": 1.5,
+          "depth_of_discharge": 0.8
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-20,-10,0,10,20",
+          "base_metric": "npv"
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": true,
+          "include_degradation": true,
+          "project_years": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Can you compare arbitrage, peak-shaving, and self-consumption dispatch strategies for a larger office site with twice the normal load and twice the normal solar? Use the summer TOU tariff with demand charge 18.0, calculate the electricity bill with demand breakdown, set the peak-shaving target to 280 kW, run the simulation in verbose mode, calculate total annual savings with annual projection, use a 5 percent discount rate, 2.5 percent electricity escalation rate, and include degradation in the 15-year NPV calculation.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 200,
+          "power_override_kw": 100
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer",
+          "demand_charge_override": 18.0
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original",
+          "include_demand_breakdown": true
+        }
+      },
+      {
+        "name": "compare_strategies",
+        "arguments": {
+          "strategies": "arbitrage,peak_shaving,self_consumption",
+          "metric": "peak_reduction"
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "peak_shaving",
+          "target_peak_kw": 280.0
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 15,
+          "discount_rate": 0.05,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.025
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Build the investment case for 200 kWh LFP with double load and double solar. Use the summer TOU tariff, calculate the electricity bill, run peak shaving at a 250 kW target, run the simulation in verbose mode, calculate total annual savings with annual projection, use a 6 percent discount rate with degradation included, run a 10-year NPV price sensitivity with -30, -15, 0, +15, and +30 percent electricity-price variations and 3.0 percent electricity escalation, and generate a 10-year investment report with sensitivity and degradation.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 200
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer"
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original"
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "peak_shaving",
+          "target_peak_kw": 250.0
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 10,
+          "discount_rate": 0.06,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.03
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-30,-15,0,15,30",
+          "base_metric": "npv"
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": true,
+          "include_degradation": true,
+          "project_years": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Check a cloudy residential setup where the 50 kW solar profile is scaled to 20 percent under 90 percent cloud cover, and the LFP battery is 40 kWh / 5 kW. Use the summer TOU tariff with demand charge 8.0, get the net-load profile statistics with hourly breakdown, analyze self-consumption including export analysis targeting 85 percent, estimate BESS sizing for a 5 kW critical load over 8 hours, configure and run a self-consumption simulation in verbose mode, estimate backup duration for that same 5 kW load from full charge including load-shedding options, calculate total annual savings with annual projection, then generate a full 12-year investment report at 0.5 cycles per day, a 5 percent discount rate and 2 percent electricity escalation.",
+    "workflow": [
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "residential_home"
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 0.2,
+          "cloud_cover_factor": 0.9
+        }
+      },
+      {
+        "name": "get_profile_statistics",
+        "arguments": {
+          "profile_type": "net_load",
+          "include_hourly_breakdown": true,
+          "percentile_threshold": 90.0
+        }
+      },
+      {
+        "name": "analyze_self_consumption",
+        "arguments": {
+          "include_export_analysis": true,
+          "target_self_consumption": 0.85
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "backup",
+          "backup_load_kw": 5.0,
+          "backup_hours": 8.0
+        }
+      },
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 40,
+          "power_override_kw": 5
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer",
+          "demand_charge_override": 8.0
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.5,
+          "strategy": "self_consumption"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "total",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 5.0,
+          "initial_soc": 1.0,
+          "min_soc": 0.1,
+          "include_load_shedding_options": true
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 12,
+          "discount_rate": 0.05,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.02
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 12,
+          "cycles_per_day": 0.5,
+          "depth_of_discharge": 0.8
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-20,-10,0,10,20",
+          "base_metric": "npv"
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": true,
+          "include_degradation": true,
+          "project_years": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run the NMC case with office load scaled by 1.5x and solar scaled by 1.5x under 90 percent cloud cover, volatile grid prices at a 1.6x price multiplier over 48 hours, 120 kW power override, compare peak-shaving, self-consumption, TOU, and arbitrage strategies on energy savings, then configure an arbitrage simulation starting at 45% initial SOC and run it for 48 hours, get the simulation results summary as statistics, report arbitrage savings with annual projection, compute 10-year degradation at 2.0 cycles per day and 85% depth of discharge, estimate backup duration for a 50 kW critical load starting at 90% SOC with a 10% minimum and load shedding options, run a 15-year LFP vs NMC lifecycle comparison on NPV at 2.0 cycles per day, and generate a 10-year investment report with sensitivity and degradation.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "nmc_100kwh",
+          "power_override_kw": 120
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 1.5
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 1.5,
+          "cloud_cover_factor": 0.9
+        }
+      },
+      {
+        "name": "load_grid_prices",
+        "arguments": {
+          "source": "volatile",
+          "price_multiplier": 1.6,
+          "hours": 48
+        }
+      },
+      {
+        "name": "compare_strategies",
+        "arguments": {
+          "strategies": "peak_shaving,self_consumption,time_of_use,arbitrage",
+          "metric": "energy_savings"
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.45,
+          "strategy": "arbitrage"
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "hours": 48
+        }
+      },
+      {
+        "name": "get_simulation_results",
+        "arguments": {
+          "metric": "summary",
+          "format_type": "statistics"
+        }
+      },
+      {
+        "name": "calculate_savings",
+        "arguments": {
+          "savings_type": "arbitrage",
+          "annual_projection": true
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 10,
+          "cycles_per_day": 2.0,
+          "depth_of_discharge": 0.85
+        }
+      },
+      {
+        "name": "estimate_backup_duration",
+        "arguments": {
+          "critical_load_kw": 50.0,
+          "initial_soc": 0.9,
+          "min_soc": 0.1,
+          "include_load_shedding_options": true
+        }
+      },
+      {
+        "name": "compare_battery_options",
+        "arguments": {
+          "chemistries": "lfp_100kwh,nmc_100kwh",
+          "project_years": 15,
+          "comparison_metric": "npv",
+          "cycles_per_day": 2.0
+        }
+      },
+      {
+        "name": "generate_investment_report",
+        "arguments": {
+          "include_sensitivity": true,
+          "include_degradation": true,
+          "project_years": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Size an LFP system for a large office with doubled load and doubled solar so it supports both peak shaving and backup. Use a 0.85 solar cloud-cover factor, use the summer TOU tariff with demand charge 22.0, estimate BESS sizing for 220 kW peak shaving and 75 kW backup for 6 hours, start from 65 percent SOC, then run peak shaving, calculate the bill before and after, report 15-year degradation at 1.2 cycles per day, report 12-year NPV with a 6 percent discount rate, use 3 percent electricity escalation in calculate_economics, and use an electricity-price sensitivity grid of -17.5, 0, and +17.5 percent.",
+    "workflow": [
+      {
+        "name": "load_battery_specs",
+        "arguments": {
+          "spec_name": "lfp_100kwh",
+          "capacity_override_kwh": 300,
+          "power_override_kw": 150
+        }
+      },
+      {
+        "name": "load_load_profile",
+        "arguments": {
+          "profile_name": "commercial_office",
+          "scale_factor": 2.0
+        }
+      },
+      {
+        "name": "load_solar_profile",
+        "arguments": {
+          "profile_name": "50kw_array",
+          "scale_factor": 2.0,
+          "cloud_cover_factor": 0.85
+        }
+      },
+      {
+        "name": "load_tariff_structure",
+        "arguments": {
+          "tariff_name": "tou_summer",
+          "demand_charge_override": 22.0
+        }
+      },
+      {
+        "name": "get_profile_statistics",
+        "arguments": {
+          "profile_type": "net_load",
+          "include_hourly_breakdown": true,
+          "percentile_threshold": 95.0
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "peak_shaving",
+          "target_peak_kw": 220.0
+        }
+      },
+      {
+        "name": "estimate_bess_sizing",
+        "arguments": {
+          "application": "backup",
+          "backup_load_kw": 75.0,
+          "backup_hours": 6.0
+        }
+      },
+      {
+        "name": "configure_simulation",
+        "arguments": {
+          "initial_soc": 0.65,
+          "strategy": "peak_shaving",
+          "target_peak_kw": 220.0
+        }
+      },
+      {
+        "name": "run_simulation",
+        "arguments": {
+          "verbose": true
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "original",
+          "include_demand_breakdown": true
+        }
+      },
+      {
+        "name": "calculate_electricity_bill",
+        "arguments": {
+          "profile_type": "with_bess",
+          "include_demand_breakdown": true
+        }
+      },
+      {
+        "name": "calculate_degradation",
+        "arguments": {
+          "years": 15,
+          "cycles_per_day": 1.2,
+          "depth_of_discharge": 0.8
+        }
+      },
+      {
+        "name": "calculate_economics",
+        "arguments": {
+          "analysis_type": "npv",
+          "project_years": 12,
+          "discount_rate": 0.06,
+          "include_degradation": true,
+          "electricity_escalation_rate": 0.03
+        }
+      },
+      {
+        "name": "run_sensitivity_analysis",
+        "arguments": {
+          "parameter": "electricity_price",
+          "variations_pct": "-17.5,0,17.5",
+          "base_metric": "npv"
+        }
+      }
+    ]
+  }
+]

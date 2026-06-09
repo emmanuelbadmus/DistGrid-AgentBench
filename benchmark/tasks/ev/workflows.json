@@ -1,0 +1,1764 @@
+[
+  {
+    "id": "001",
+    "query": "Before any optimization on Glover, list the six EV charger candidates with the largest demand.",
+    "workflow": [
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "list_ev_charger_candidates",
+        "arguments": {
+          "top_k": 6,
+          "sort_by": "demand"
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Pull the Stowe charger candidate list before optimization, increase demand by 35 percent, and show the top eight priority-heavy sites alongside the top five biggest loads.",
+    "workflow": [
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "stowe",
+          "demand_scale": 1.35
+        }
+      },
+      {
+        "name": "list_ev_charger_candidates",
+        "arguments": {
+          "top_k": 8,
+          "sort_by": "priority"
+        }
+      },
+      {
+        "name": "list_ev_charger_candidates",
+        "arguments": {
+          "top_k": 5,
+          "sort_by": "demand"
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Find an EV placement for Stowe at 10 AM on March 23, 2025 that serves at least 200 kW using sparse placement to concentrate on the highest-demand sites, then summarize selected chargers with pole IDs, phases, and coordinates.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23T10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23T10:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "min_total_kw": 200.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "min_total_kw": 200.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Using the South Hero March 17, 2025 19:00 case, report how much candidate EV demand the top 10 selected chargers serve under sparse placement and export the placement table to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17T19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17T19:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Try a softer 75 percent Rochester EV-demand case with at least 150 kW served under a 105 percent transformer loading cap using sparse placement, and identify the five buses with the largest unserved demand plus the seven-bus placement summary.",
+    "workflow": [
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester",
+          "demand_scale": 0.75
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "min_total_kw": 150.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "min_total_kw": 150.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.001,
+          "max_iter": 1200
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_unserved",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 7
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "For South Hero at noon on March 18, 2025, scale charger demand down to 85 percent, choose no more than three sites while serving at least 180 kW using sparse placement, and save the placement as JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-18T12:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "south_hero",
+          "demand_scale": 0.85
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 3,
+          "min_total_kw": 180.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 3,
+          "min_total_kw": 180.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1200
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Place EV chargers for Rochester on 03/19/2025 at 3 PM using sparse placement, check the voltage impact at those buses, and export the voltage results to CSV plus the placement results to JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19T15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19T15:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "For Stowe at 2025-03-20 22:00, run a small three-site EV rollout with voltage limits 0.94 to 1.06 p.u. and cable current capped at 110 percent, balancing demand evenly across selected sites. A placement map is enough.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20T22:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20T22:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 3
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 3
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.01,
+          "max_iter": 3000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Test Rochester at 6 PM on March 18, 2025 with EV demand increased by 20 percent and up to four sites, balancing demand evenly across chargers, then report whether EV-bus voltages stay within 0.95 to 1.05 p.u.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18T18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18T18:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester",
+          "demand_scale": 1.2
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 4
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 4
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Find a South Hero EV placement for March 17, 2025 at 09:00 that respects a 90 percent transformer loading cap using sparse placement, and export the placement as JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17T09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17T09:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 0.9
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Screen an EV placement for Glover at 2025-03-20T12:00 under 107 percent transformer loading and 115 percent cable ampacity using sparse placement, then show the top three EV-served buses and the map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20T12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20T12:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.07
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.15
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_served",
+          "top_k": 3
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "glover"
+        }
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Plan the best five-charger South Hero deployment at 2 PM on March 20, 2025 with at least 250 kW served and normal voltage limits, balancing demand evenly across sites. Save placement as CSV and voltages as JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 14:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 14:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 5,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 5,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1500
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Pick up to five Rochester EV charger sites for 8 PM on March 19, 2025 that serve at least 300 kW while keeping voltages within 0.95 to 1.05 p.u. and transformer loading capped at 105 percent using sparse placement. Also list the top five EV-served buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19T20:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19T20:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 5,
+          "min_total_kw": 300.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 5,
+          "min_total_kw": 300.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 3000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_served",
+          "top_k": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Run Glover at 6 PM on March 21, 2025 as a tight two-charger deployment with charger demand increased by 10 percent, distributing demand evenly across sites. Keep cable loading capped at 105 percent, then check selected EV-bus voltage impacts, report the top five EV-served buses, and map the sites.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21T18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21T18:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "glover",
+          "demand_scale": 1.1
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 2
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 2
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1500
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_served",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "glover"
+        }
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Use Rochester at 2025-03-22 09:00:00 for a small three-site EV rollout using sparse placement. Keep voltages in the 0.96 to 1.04 p.u. band, cap transformer loading at 108 percent, and check EV-bus voltage impacts plus a placement map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-22 09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-22 09:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 3
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 3
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1200
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.96,
+          "vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "rochester"
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Increase Glover EV demand by 15 percent for March 19, 2025, 7 PM, select up to four charger sites under voltage limits 0.95 to 1.05 p.u. and cable loading capped at 112 percent, distributing demand evenly across selected sites, then export the placement map and CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-19 19:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "glover",
+          "demand_scale": 1.15
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 4
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 4
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1500
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "For Stowe on March 22, 2025 at 4 PM, run the standard EV-placement case with sparse placement, 0.95 to 1.05 p.u. voltage limits, 1.10 transformer loading cap, and 1.10 cable loading cap active. Aim for four chargers and at least 220 kW served, then check EV-bus voltage impacts, export voltages as JSON, and export the placement as CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-22T16:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-22T16:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 4,
+          "min_total_kw": 220.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 4,
+          "min_total_kw": 220.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 1800
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Plan up to four Glover charger sites at noon on March 20, 2025 while serving at least 250 kW, keeping voltage within 0.95 to 1.05 p.u., and capping transformer loading at 110 percent, with demand balanced evenly across sites. Include selected-site summary, EV-bus voltage check, placement map, and CSV export.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20T12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20T12:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 4,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l2",
+          "max_chargers": 4,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.001,
+          "max_iter": 3000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 4
+        }
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run the full South Hero EV rollout stress case at 2025-03-20 14:00:00: scale charger demand up by 25 percent, enforce voltage limits 0.95 to 1.05 p.u., cap transformer loading at 105 percent and cable current at 108 percent, place up to five chargers serving at least 250 kW using sparse placement, summarize the top 10 charger placements, check EV-bus voltages, list the six largest unserved-demand buses, map it, and export placements to CSV and voltages to JSON.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 14:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-20 14:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "south_hero",
+          "demand_scale": 1.25
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 5,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 5,
+          "min_total_kw": 250.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 2000
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 10
+        }
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.95,
+          "vmax_pu": 1.05
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_unserved",
+          "top_k": 6
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Use Rochester for the March 19, 2025 20:00 EV placement audit with charger demand increased by 10 percent. Load that state, list the eight largest charger candidates, downselect up to four chargers serving at least 275 kW under voltage limits 0.96 to 1.04 p.u. and transformer loading capped at 103 percent using sparse placement, update placement and voltages, summarize the top eight selected placement entries, compare the top five served and unserved demand buses, check EV-bus voltage impacts, map placements, export placement JSON, and export voltage CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 20:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 20:00:00"
+        }
+      },
+      {
+        "name": "load_ev_charger_data",
+        "arguments": {
+          "feeder": "rochester",
+          "demand_scale": 1.1
+        }
+      },
+      {
+        "name": "list_ev_charger_candidates",
+        "arguments": {
+          "top_k": 8,
+          "sort_by": "demand"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.03
+        }
+      },
+      {
+        "name": "set_ev_charger_placement_targets",
+        "arguments": {
+          "max_chargers": 4,
+          "min_total_kw": 275.0
+        }
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "ev_placement_l1",
+          "max_chargers": 4,
+          "min_total_kw": 275.0
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "ev_placement_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 2200
+        }
+      },
+      {
+        "name": "update_ev_charger_placement",
+        "arguments": {
+          "min_served_kw": 0.001
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "summarize_ev_charger_placement",
+        "arguments": {
+          "top_k": 8
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_served",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "ev_unserved",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "check_ev_charger_voltage_impacts",
+        "arguments": {
+          "vmin_pu": 0.96,
+          "vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "ev_placement",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "ev_placement",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  }
+]

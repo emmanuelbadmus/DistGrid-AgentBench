@@ -1,0 +1,1761 @@
+[
+  {
+    "id": "001",
+    "query": "Use South Hero at 2025-03-22 10:00:00 for a sparse current-infeasibility screen without extra operating limits, then separately check bus voltages against the normal \u00b15 percent band.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {}
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Run Rochester for March 18, 2025, 8 PM through an L2 infeasibility check. Use IPOPT with max 500 iterations, then return the infeasible-current map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 20:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 20:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "rochester"
+        }
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Run a load-only L2 infeasibility screen for Glover on 2025-03-16 at 12:00 with voltage limits 0.97 to 1.03 p.u., tolerance 1e-4, max 250 iterations, and transformer loading capped at 108 percent. Show the six largest infeasible-current buses and any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-16 12:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.97,
+          "default_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 250
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 6
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "For Glover, use the 2025-03-21 18:00 case, then run a sparse L1 infeasibility screen with tolerance 1e-6. Report the five largest infeasible-current buses and the solved voltage map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-21 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "tolerance": 1e-06
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "glover"
+        }
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Diagnose infeasibility for Stowe on March 22, 2025 at 4 PM using sparse current slack variables instead of an ordinary power-flow solve. Use voltage limits 0.95 to 1.05 p.u., allow transformer loading up to 115 percent, rank the ten largest infeasible-current buses, and export resulting voltages to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-22 16:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-22 16:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.15
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 10
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "At Rochester, use 2025-03-19 15:00 and keep buses 14 and 32 especially tight during the L2 infeasibility screen, then list the top eight problem buses and export voltages to CSV.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "14",
+            "32"
+          ],
+          "exception_vmin_pu": 0.985,
+          "exception_vmax_pu": 1.015
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 350
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 8
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Run Stowe for March 23, 2025, 10:00 AM through an L2 infeasibility study. Use voltage limits 0.94 to 1.06 p.u., keep buses 10, 25, and 36 within 0.98 to 1.02 p.u., cap transformer loading at 115 percent, use tolerance 1e-6 and max 1000 iterations, and include infeasible-current and voltage maps.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "10",
+            "25",
+            "36"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.15
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 1000
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Use Stowe on 03/20/2025 at 22:00 for the sparse L1 current-slack infeasibility formulation with cable and transformer constraints both capped at 110 percent. Use tolerance 1e-4 and max 300 iterations, then map infeasible-current magnitude first and the resulting voltage profile second.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 22:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-20 22:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 0.0001,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Hold South Hero buses 5, 12, and 20 within a 0.98 to 1.02 p.u. voltage band during the 2025-03-19 14:00 L2 infeasibility screen, other buses should have a 0.95 to 1.05 p.u. global voltage band, and show both maps plus the five worst buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-19 14:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-19 14:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "5",
+            "12",
+            "20"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 400
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "For Stowe, run the March 23, 2025 10 AM sparse L1 infeasibility screen using voltage limits 0.95 to 1.05 p.u., buses 10, 25, and 36 tightened to 0.985 to 1.015 p.u., transformer loading capped at 115 percent, tolerance 1e-6, and max 500 iterations. Save solved voltages as CSV and create a voltage map.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-23 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "10",
+            "25",
+            "36"
+          ],
+          "exception_vmin_pu": 0.985,
+          "exception_vmax_pu": 1.015
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.15
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "stowe"
+        }
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Check South Hero using the 2025-03-17 19:00 case, an L2 infeasibility screen, voltage limits 0.95 to 1.05 p.u. with buses 1, 25, and 67 tightened to 0.98 to 1.02 p.u., and cable loading capped at 105 percent. Show the five largest infeasible-current buses and any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-17 19:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "1",
+            "25",
+            "67"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 400
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Use South Hero at 10:00 on 22 Mar 2025 for a sparse L1 infeasibility check with buses 8, 16, and 24 held to 0.98 to 1.02 p.u. inside a 0.94 to 1.06 p.u. global band. Cap transformer loading at 105 percent, export voltages to JSON, and list the ten strongest infeasible-current locations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "8",
+            "16",
+            "24"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 450
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 10
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Run the Glover sparse L1 infeasible-current screen for March 20, 2025, 09:00 with cable loading capped at 112 percent and transformer loading capped at 108 percent. Return the three largest current-slack buses and a JSON voltage export.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 09:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 09:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 600
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 3
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Perform an L2 infeasibility check for Stowe at 2025-03-21T13:00 with buses 7 and 22 tightened to 0.97 to 1.03 p.u. inside a 0.94 to 1.06 p.u. broader voltage band, and transformer loading capped at 110 percent. Map infeasible currents and report whether voltages still violate limits.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 13:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "stowe",
+          "timestamp": "2025-03-21 13:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "7",
+            "22"
+          ],
+          "exception_vmin_pu": 0.97,
+          "exception_vmax_pu": 1.03
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "stowe"
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Use Rochester at March 18, 2025, 18:00 for an L2 constrained infeasibility stress check with a 0.95 to 1.05 p.u. voltage band overall, tighter limits of 0.98 to 1.02 p.u. on buses 1, 25, and 67, and transformer loading capped at 107 percent. Show the worst five infeasible-current locations and both maps.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "1",
+            "25",
+            "67"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.07
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "rochester"
+        }
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Run an L2 infeasibility check on Rochester for 03/18/2025 6 PM with voltage limits 0.94 to 1.06 p.u. and transformer loading capped at 110 percent. I only need the top three infeasible-current buses plus voltage and infeasibility maps.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 18:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 18:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": null,
+          "exception_vmin_pu": null,
+          "exception_vmax_pu": null
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.1
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 300
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "Glover on 2025-03-20 at 12:00 needs a sparse L1 infeasibility pass with a 0.96 to 1.04 p.u. voltage band and transformer loading capped at 108 percent. Save voltages as JSON, list the five largest infeasible-current buses, and map infeasible currents.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 12:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "glover",
+          "timestamp": "2025-03-20 12:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "glover"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 400
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "glover"
+        }
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Check Rochester at 2025-03-18 20:00:00 with L2 infeasibility, voltage limits 0.96 to 1.04 p.u., cable loading capped at 108 percent, and transformer loading capped at 112 percent. Return the infeasible-current map, top five infeasible-current buses, and voltage sanity check.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 20:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-18 20:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.96,
+          "default_vmax_pu": 1.04
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.12
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-05,
+          "max_iter": 500
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 5
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run the full constrained Rochester infeasibility investigation for March 19, 2025 at 3 PM: use L2 current slack, keep buses 14, 32, and 55 within 0.98 to 1.02 p.u. inside a 0.94 to 1.06 p.u. global band, cap transformer loading at 105 percent and cable current at 108 percent, map currents, export voltages to CSV, and list the ten largest infeasible-current buses.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "rochester",
+          "timestamp": "2025-03-19 15:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "rochester"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.94,
+          "default_vmax_pu": 1.06,
+          "exception_bus_ids": [
+            "14",
+            "32",
+            "55"
+          ],
+          "exception_vmin_pu": 0.98,
+          "exception_vmax_pu": 1.02
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.05
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.08
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 600
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l2"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 10
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "csv"
+        }
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Use South Hero on March 22, 2025 at 10:00 AM for a sparse L1 infeasibility deep dive, voltage limits 0.95 to 1.05 p.u., buses 8, 16, and 24 tightened to 0.985 to 1.015 p.u., transformer loading capped at 103 percent, cable current capped at 106 percent, show the top 12 infeasible-current buses, final voltage and infeasibility maps, JSON voltage output, and report any voltage violations.",
+    "workflow": [
+      {
+        "name": "load_load",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_solar",
+        "arguments": {
+          "feeder": "south_hero",
+          "timestamp": "2025-03-22 10:00:00"
+        }
+      },
+      {
+        "name": "load_distribution_network",
+        "arguments": {
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "create_and_initialize_model",
+        "arguments": {}
+      },
+      {
+        "name": "build_constraints",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "set_voltage_limits",
+        "arguments": {
+          "default_vmin_pu": 0.95,
+          "default_vmax_pu": 1.05,
+          "exception_bus_ids": [
+            "8",
+            "16",
+            "24"
+          ],
+          "exception_vmin_pu": 0.985,
+          "exception_vmax_pu": 1.015
+        }
+      },
+      {
+        "name": "set_transformer_loading_limits",
+        "arguments": {
+          "rating_multiplier": 1.03
+        }
+      },
+      {
+        "name": "set_cable_current_limits",
+        "arguments": {
+          "rating_multiplier": 1.06
+        }
+      },
+      {
+        "name": "build_objective",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "solve",
+        "arguments": {
+          "solver": "ipopt",
+          "tolerance": 1e-06,
+          "max_iter": 700
+        }
+      },
+      {
+        "name": "update_bus_infeasible_currents",
+        "arguments": {
+          "analysis_type": "infeasibility_l1"
+        }
+      },
+      {
+        "name": "update_network_voltages",
+        "arguments": {}
+      },
+      {
+        "name": "list_top_buses",
+        "arguments": {
+          "metric": "infeasibility",
+          "top_k": 12
+        }
+      },
+      {
+        "name": "export_data_to_file",
+        "arguments": {
+          "export_type": "voltages",
+          "file_format": "json"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "infeasibility",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "plot_network_data",
+        "arguments": {
+          "plot_type": "voltage",
+          "feeder": "south_hero"
+        }
+      },
+      {
+        "name": "check_voltage_violations",
+        "arguments": {}
+      }
+    ]
+  }
+]

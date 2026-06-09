@@ -1,0 +1,1036 @@
+[
+  {
+    "id": "001",
+    "query": "Load the base GFI parameters and configure PQ mode with an active-power reference of 0.85 p.u. and a reactive-power reference of 0.05 p.u.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Pref_const",
+          "value": 0.85
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Qref_const",
+          "value": 0.05
+        }
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "query": "Apply a large 1.0 rad phase jump to the base PQ inverter, run the full simulation, check stability, and keep the response plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 1.0
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "003",
+    "query": "Use frequency-support mode with a 40.0 frequency-droop coefficient and a 0.0005 deadband, use the Schur solve, then report stability, active-power overshoot, and save the response plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "FS",
+          "K_droop_f": 40.0,
+          "f_db": 0.0005
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "004",
+    "query": "Stress the base PQ inverter with a 0.4 rad grid phase jump, save the plot, and report stability plus PLL settling time.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.4
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "005",
+    "query": "Test the Volt-Var controller under a 0.90 p.u. voltage sag, report whether the reactive-power response stays stable, report the reactive-power overshoot, and plot the response.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "VOLT-VAR",
+          "K_droop_v": 20.0,
+          "Vdb": 0.01
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "Vmag_dist": 0.9
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "006",
+    "query": "Apply a modest 0.2 rad phase jump in PQ mode, then check stability, show P and Q transient overshoots, and save the response plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.2
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "007",
+    "query": "Check Volt-Var behavior with K_droop_v 20.0, deadband 0.05, and a 1.025 p.u. voltage disturbance; report stability, reactive-power overshoot, settling behavior, and a plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "VOLT-VAR",
+          "K_droop_v": 20.0,
+          "Vdb": 0.05
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "Vmag_dist": 1.025
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "008",
+    "query": "Set the PLL filter time constant Tf_pll to 0.002 in the PQ inverter case, apply a 0.2 rad phase jump, run the full simulation, check stability, measure how quickly it resettles, and plot the results.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Tf_pll",
+          "value": 0.002
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.2
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "009",
+    "query": "Set up the Volt-Var controller with K_droop_v 20.0 and a 0.02 voltage deadband, then set V_target to 1.0 p.u. as a separate parameter.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "VOLT-VAR",
+          "K_droop_v": 20.0,
+          "Vdb": 0.02
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "V_target",
+          "value": 1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "010",
+    "query": "Try the moderate Volt-Var case with K_droop_v at 15.0, a 0.03 deadband, and a 0.92 p.u. voltage sag. Run the full simulation and return stability, settling time, reactive-power overshoot, and the response plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "VOLT-VAR",
+          "K_droop_v": 15.0,
+          "Vdb": 0.03
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "Vmag_dist": 0.92
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "011",
+    "query": "Put the PQ inverter on a weaker grid by multiplying the line resistance by 5 and the line reactance by 5, apply a 0.1 rad phase jump, then report stability, settling time, and plot the response.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "R_line_pu",
+          "value": 0.1426
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "X_line_pu",
+          "value": 0.140423
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.1
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "012",
+    "query": "Run a combined disturbance on the PQ inverter with a 0.3 rad phase jump and a 0.92 p.u. voltage sag, then summarize stability, settling, and P/Q overshoot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.3,
+          "Vmag_dist": 0.92
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      }
+    ]
+  },
+  {
+    "id": "013",
+    "query": "Use the standard inverter in frequency-support mode with K_droop_f 30.0, a wider 0.001 deadband, 0.8 p.u. active-power target, and a 0.25 rad phase jump at 0.25 seconds. Run the Schur solve and report stability, active-power overshoot, PLL settling time, and a plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "FS",
+          "K_droop_f": 30.0,
+          "f_db": 0.001
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Pref_const",
+          "value": 0.8
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.25,
+          "phase_jump_time": 0.25
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "014",
+    "query": "Check whether faster inner-current filtering changes the transient behavior by setting the PQ-mode current-control filter time constant to 0.001, adding a 0.15 rad phase jump, running the full simulation, and reporting stability, PLL settling time, and active-power overshoot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Tf_ig",
+          "value": 0.001
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.15
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      }
+    ]
+  },
+  {
+    "id": "015",
+    "query": "Reduce the base PQ inverter active-power reference to 0.65 p.u., set reactive power reference to 0.10 p.u., apply a 0.15 rad phase jump, run the full solver, check stability, compare P and Q transient overshoots, and plot the response.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Pref_const",
+          "value": 0.65
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Qref_const",
+          "value": 0.1
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.15
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "016",
+    "query": "Use PQ mode, treat the inverter as connected to a weaker upstream grid by setting R_line_pu to 0.08556 and X_line_pu to 0.084254, then apply a 0.95 p.u. voltage dip, run both the full and Schur solver variants, compare runtime, check stability, and keep the full-solve plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "PQ"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "R_line_pu",
+          "value": "<p['R_line_pu'] * 3.0>"
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "X_line_pu",
+          "value": "<p['X_line_pu'] * 3.0>"
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "Vmag_dist": 0.95
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "compare_gfi_solvers",
+        "arguments": {}
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "017",
+    "query": "In frequency-support mode, use K_droop_f of 25.0, a 0.001 deadband, and a 0.9 p.u. active-power reference. With a 0.35 rad grid phase jump, use the Schur solve to report stability, settling, P/Q overshoot, and plot the results.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "FS",
+          "K_droop_f": 25.0,
+          "f_db": 0.001
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Pref_const",
+          "value": 0.9
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.35
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "018",
+    "query": "Load the GFI parameter set and switch to frequency-support mode with a droop coefficient of 20.0 and a frequency deadband of 0.001.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "FS",
+          "K_droop_f": 20.0,
+          "f_db": 0.001
+        }
+      }
+    ]
+  },
+  {
+    "id": "019",
+    "query": "Run a hard frequency-support inverter case with K_droop_f 35.0, frequency deadband 0.0005, active-power reference 0.75 p.u., and a 0.35 rad phase jump at 0.25 seconds. Use both full and Schur solver variants, then report stability, settling, P/Q overshoot, speedup, and the response plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "FS",
+          "K_droop_f": 35.0,
+          "f_db": 0.0005
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Pref_const",
+          "value": 0.75
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.35,
+          "phase_jump_time": 0.25
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "P_expr"
+        }
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "compare_gfi_solvers",
+        "arguments": {}
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "id": "020",
+    "query": "Stress Volt-Var control on a weak grid by setting K_droop_v to 25.0, voltage deadband to 0.015, line resistance and reactance to 3.5 p.u., current-control filter time constant to 0.001, applying a 0.88 p.u. voltage sag plus a 0.25 rad phase jump at 0.2 seconds, and checking both solvers, stability, settling, reactive-power overshoot, and the saved plot.",
+    "workflow": [
+      {
+        "name": "load_gfi_parameters",
+        "arguments": {}
+      },
+      {
+        "name": "set_gfi_mode",
+        "arguments": {
+          "mode": "VOLT-VAR",
+          "K_droop_v": 25.0,
+          "Vdb": 0.015
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "R_line_pu",
+          "value": 3.5
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "X_line_pu",
+          "value": 3.5
+        }
+      },
+      {
+        "name": "set_gfi_parameter",
+        "arguments": {
+          "key": "Tf_ig",
+          "value": 0.001
+        }
+      },
+      {
+        "name": "set_gfi_disturbance",
+        "arguments": {
+          "phase_jump_angle": 0.25,
+          "Vmag_dist": 0.88,
+          "phase_jump_time": 0.2
+        }
+      },
+      {
+        "name": "set_simulation_timespan",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "full"
+        }
+      },
+      {
+        "name": "check_gfi_stability",
+        "arguments": {}
+      },
+      {
+        "name": "get_gfi_overshoot",
+        "arguments": {
+          "variable": "Q_expr"
+        }
+      },
+      {
+        "name": "get_gfi_settling_time",
+        "arguments": {}
+      },
+      {
+        "name": "run_gfi_simulation",
+        "arguments": {
+          "method": "schur"
+        }
+      },
+      {
+        "name": "compare_gfi_solvers",
+        "arguments": {}
+      },
+      {
+        "name": "plot_gfi_results",
+        "arguments": {}
+      }
+    ]
+  }
+]

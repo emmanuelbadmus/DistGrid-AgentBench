@@ -1,0 +1,12 @@
+# Core
+matplotlib
+numpy
+pandas
+pydantic>=2
+scipy
+
+# GFI simulation (optimization extra)
+pyomo
+
+# MCP server (mcp extra)
+mcp>=1.0

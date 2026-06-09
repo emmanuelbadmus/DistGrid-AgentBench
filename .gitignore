@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build / dist
+build/
+dist/
+
+# Tools / caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+*.env.*
+
+# Generated outputs (not source)
+data/outputs/
+data/execution_output/
+
+# Proprietary — not distributed
+data/inputs/feeders/
+data/inputs/geopackage/
+distgrid_bench/tools/network/
