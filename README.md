@@ -69,11 +69,14 @@ Ten task families, 20 cases each, 200 total:
 `benchmark/tasks.jsonl` is the agent-facing task file — one JSON object per line:
 
 ```json
-{"id": "001", "family": "general", "query": "How many capacitors are in the Rochester feeder?"}
+{"id": "118", "family": "bess", "family_id": "018", "query": "..."}
 ```
 
-The corresponding ground-truth workflow and reference solution script live in
-`benchmark/tasks/{family}/` alongside each other.
+`id` is the global task number (001-200, matches the file's line order). `family_id`
+is that task's number within its family (001-020) and is the key for finding its
+ground truth: task 118 above is `bess` case `018`, so its canonical workflow is the
+`"018"` entry in `benchmark/tasks/bess/workflows.json` and its reference solution is
+`benchmark/tasks/bess/18.py`.
 
 Each family contains 20 numbered Python scripts (`1.py` through `20.py`) that are the
 human-expert reference solutions — they show exactly how a domain expert would solve
